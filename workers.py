@@ -3,6 +3,7 @@ import cdsapi_wrapper as cds
 import datetime
 import threading
 from job import *
+from status import Status
 
 class Worker:
     def __init__(self, job):
@@ -48,7 +49,6 @@ def workerController(max_number_of_workers):
 
             # Check to see if there are any jobs that are in the queue
             ##queued_jobs = Job.select().order_by(Job.id)
-            print("--")
-            for j in Job.select().where(Job.status == STATUS_QUEUED).order_by(Job.job_id):
+            for j in Job.select().where(Job.status == Status.QUEUED.value).order_by(Job.job_id):
                 print(j.job_id)
     
