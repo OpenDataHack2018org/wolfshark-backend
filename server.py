@@ -6,11 +6,10 @@ app = Flask(__name__)
 api = Api(app)
 
 parser = reqparse.RequestParser()
-parser.add_argument()
+parser.add_argument('user_name', 'user_key', 'title', 'dataset', 'area', 'start_date_time', 'end_date_time', )
 
 class AddJob(Resource):
     def post(self):
-
 
         return {'hello': 'world'}
 

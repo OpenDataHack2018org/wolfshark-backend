@@ -1,12 +1,5 @@
 from peewee import *
-
-STATUS_QUEUED = 1
-STATUS_PROCESSING = 2
-STATUS_COMPLETED = 3
-STATUS_ERROR = 4
-
-THEME_DARK = 5
-THEME_LIGHT = 6
+from status import Status
 
 db = SqliteDatabase('jobs.db')
 
@@ -37,7 +30,7 @@ class Job(Model):
         self.area = area
         self.theme = theme
         self.fps = fps
-        self.status = STATUS_QUEUED
+        self.status = Status.QUEUED
 
     class Meta:
         database = db
