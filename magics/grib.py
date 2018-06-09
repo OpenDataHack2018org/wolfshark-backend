@@ -2,36 +2,51 @@ from Magics.macro import *
 import os
 import sys
 
-def grib_to_png(filename, text, width=4000):
+dark_background = mcoast(
+    map_coastline_sea_shade="on",
+    map_coastline_land_shade_colour="rgb(12,63,106)",
+    map_grid="off",
+    map_coastline_land_shade="on",
+    map_coastline_sea_shade_colour="rgb(0,3,60)",
+    map_label="off",
+    map_coastline_colour="rgb(12,63,106)",
+)
+light_background = mcoast(
+    map_coastline_colour="black",
+    map_coastline_land_shade="on",
+    map_coastline_land_shade_colour="rgb(0.85,0.85,0.85)",
+    map_coastline_sea_shade="on",
+    map_coastline_sea_shade_colour="white",
+    map_grid="off",
+    map_label="off",
+)
+
+www_foreground = mcoast(
+    map_disputed_boundaries="off",
+    map_coastline_resolution="high",
+    map_coastline_land_shade_colour="rgba(1,1,1, 0.2)",
+    map_grid="on",
+    map_grid_line_style="solid",
+    map_grid_colour="rgba(0,0,0,0.5)",
+    map_boundaries="on",
+    map_boundaries_colour="rgba(255,255,255, 0.5)",
+    map_administrative_boundaries_style="dot",
+    map_administrative_boundaries_colour="rgba(255,255,255, 0.5)",
+    map_coastline_land_shade="off",
+    map_coastline_sea_shade="off",
+    map_administrative_boundaries="off",
+    map_label="off",
+    map_coastline_colour="rgba(1,1,1, 0.8)",
+)
+
+
+def grib_to_png(filename, text, width=4000, dark=True):
     my_cont = mcont(contour_automatic_setting="web")
 
-    background = mcoast(
-        map_coastline_sea_shade="on",
-        map_coastline_land_shade_colour="rgb(12,63,106)",
-        map_grid="off",
-        map_coastline_land_shade="on",
-        map_coastline_sea_shade_colour="rgb(0,3,60)",
-        map_label="off",
-        map_coastline_colour="rgb(12,63,106)",
-    )
-
-    www_foreground = mcoast(
-        map_disputed_boundaries="off",
-        map_coastline_resolution="high",
-        map_coastline_land_shade_colour="rgba(1,1,1, 0.2)",
-        map_grid="on",
-        map_grid_line_style="solid",
-        map_grid_colour="rgba(0,0,0,0.5)",
-        map_boundaries="on",
-        map_boundaries_colour="rgba(255,255,255, 0.5)",
-        map_administrative_boundaries_style="dot",
-        map_administrative_boundaries_colour="rgba(255,255,255, 0.5)",
-        map_coastline_land_shade="off",
-        map_coastline_sea_shade="off",
-        map_administrative_boundaries="off",
-        map_label="off",
-        map_coastline_colour="rgba(1,1,1, 0.8)",
-    )
+    if dark:
+        background = dark_background
+    else:
+        background = light_background
 
     outfile = filename.split(".grib")[0]
 
@@ -70,7 +85,8 @@ def grib_to_png(filename, text, width=4000):
         text_font_size=1.5,
     )
 
-    plot(out,background, data, my_cont, www_foreground, my_title)
+    plot(out, background, data, my_cont, www_foreground, my_title)
+
 
 if __name__ == "__main__":
     grib_to_png(sys.argv[1], "test")
