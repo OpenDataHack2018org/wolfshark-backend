@@ -1,5 +1,4 @@
 from peewee import *
-from status import Status
 
 db = PostgresqlDatabase('postgres',
                         user='postgres',
