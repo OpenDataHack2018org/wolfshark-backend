@@ -1,0 +1,6 @@
+Flask-RESTful==0.3.6
+ffmpeg-python==0.1.12
+gunicorn==19.8.1
+cdsapi==0.1.0
+numpy==1.13.3
+jinja2==2.10

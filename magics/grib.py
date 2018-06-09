@@ -1,6 +1,7 @@
 from Magics.macro import *
 import os
 import sys
+from areas import Areas
 
 dark_background = mcoast(
     map_coastline_sea_shade="on",
@@ -40,7 +41,7 @@ www_foreground = mcoast(
 )
 
 
-def grib_to_png(filename, text, width=4000, dark=True):
+def grib_to_png(filename, text, area=Areas.WORLD, width=4000, dark=True):
     my_cont = mcont(contour_automatic_setting="web")
 
     if dark:
@@ -85,7 +86,7 @@ def grib_to_png(filename, text, width=4000, dark=True):
         text_font_size=1.5,
     )
 
-    plot(out, background, data, my_cont, www_foreground, my_title)
+    plot(out, area.value, background, data, my_cont, www_foreground, my_title)
 
 
 if __name__ == "__main__":
