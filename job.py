@@ -1,7 +1,10 @@
 from peewee import *
 from status import Status
 
-db = SqliteDatabase('jobs.db')
+db = PostgresqlDatabase('postgres',
+                        user='postgres',
+                        password='pa55w0rd',
+                        host='127.0.0.1')
 
 
 class Job(Model):
@@ -13,24 +16,13 @@ class Job(Model):
     end_date_time = DateTimeField()
     interval = IntegerField()
     no_of_frames = IntegerField()
-    area = CharField()                     # needs to be an enum
+    area = CharField()                # TODO use blobs or JSON
     theme = IntegerField()
-    fps = IntegerField()
+    speed = IntegerField()
     status = IntegerField()
-
-    def __init__(self, title, user_name, user_key, start_date_time, end_date_time, interval, no_of_frames, area, theme, fps):
-        Model.__init__(self)
-        self.title = title
-        self.user_name = user_name
-        self.user_key = user_key
-        self.start_date_time = start_date_time
-        self.end_date_time = end_date_time
-        self.interval = interval
-        self.no_of_frames = no_of_frames
-        self.area = area
-        self.theme = theme
-        self.fps = fps
-        self.status = Status.QUEUED
+    resolution = IntegerField()
+    output = IntegerField()
+    format = CharField()
 
     class Meta:
         database = db
