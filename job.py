@@ -1,0 +1,35 @@
+from peewee import *
+
+db = SqliteDatabase('jobs.db')
+
+
+class Job(Model):
+    job_id = AutoField()
+    title = CharField()                 # needs to be an enum
+    user_name = CharField()
+    user_key = CharField()
+    start_date_time = DateTimeField()
+    end_date_time = DateTimeField()
+    interval = IntegerField()
+    no_of_frames = IntegerField()
+    area = CharField()                  # needs to be an enum
+    theme = CharField()                 # needs to be an enum
+    fps = IntegerField()
+    status = CharField()                # needs to be an enum
+
+    def __init__(self, title, user_name, user_key, start_date_time, end_date_time, interval, no_of_frames, area, theme, fps, status):
+        Model.__init__(self)
+        self.title = title
+        self.user_name = user_name
+        self.user_key = user_key
+        self.start_date_time = start_date_time
+        self.end_date_time = end_date_time
+        self.interval = interval
+        self.no_of_frames = no_of_frames
+        self.area = area
+        self.theme = theme
+        self.fps = fps
+        self.status = status
+
+    class Meta:
+        database = db
