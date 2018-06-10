@@ -2,14 +2,15 @@ import os
 from flask import Flask, send_from_directory, render_template
 from flask_restful import reqparse, Resource, Api
 from peewee import *
+import threading
+import workers
 from job import Job
 from theme import Theme
 from status import Status
 from output import Output
-from cdsapi_wrapper import get_grib_files
-import datetime
 
 app = Flask(__name__, static_folder='dist/static', template_folder='dist')
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -70,10 +71,6 @@ class Jobs(Resource):
         except DataError:
             return "invalid data"
 
-        job = Job.select().where(Job.job_id == job.job_id).get()
-
-        get_grib_files(job)
-
         db.close()
         return "success"
 
@@ -95,4 +92,9 @@ api.add_resource(Jobs, '/api/job')
 
 if __name__ == '__main__':
     p = os.environ.get('PORT')
-    app.run(debug=True, port=p)
+    # Launch worker to ansyncronously handle the video generation
+    print("starting the worker thread")
+    worker = threading.Thread(target=workers.workerController)
+    worker.start()
+    app.run(debug=True, port=p, use_reloader=False)
+
