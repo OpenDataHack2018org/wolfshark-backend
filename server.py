@@ -43,7 +43,6 @@ class Jobs(Resource):
         db.connect()
         try:
             job = Job(user_name=args["user_name"],
-                      user_key=args["user_key"],
                       title=args["title"],
                       area=args["area"],
                       start_date_time=args["start_date_time"],
