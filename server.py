@@ -36,23 +36,27 @@ class Jobs(Resource):
         args = parser.parse_args()
         db.connect()
         db.create_tables([Job])
-        job = Job(user_name=args["user_name"],
-                  user_key=args["user_key"],
-                  title=args["title"],
-                  area=args["area"],
-                  start_date_time=args["start_date_time"],
-                  end_date_time=args["end_date_time"],
-                  interval=args["interval"],
-                  dataset=args["dataset"],
-                  theme=Theme[args["theme"].upper()].value,
-                  speed=args["speed"],
-                  resolution=args["resolution"],
-                  output=Output[args["output"].upper()].value,
-                  format=args["format"],
-                  status=Status.QUEUED.value,
-                  video=""  # may cause problems not sure until we try
-                  )
-        job.save()
+        try:
+            job = Job(user_name=args["user_name"],
+                      user_key=args["user_key"],
+                      title=args["title"],
+                      area=args["area"],
+                      start_date_time=args["start_date_time"],
+                      end_date_time=args["end_date_time"],
+                      interval=args["interval"],
+                      dataset=args["dataset"],
+                      theme=Theme[args["theme"].upper()].value,
+                      speed=args["speed"],
+                      resolution=args["resolution"],
+                      output=Output[args["output"].upper()].value,
+                      format=args["format"],
+                      status=Status.QUEUED.value,
+                      video=""  # may cause problems not sure until we try
+                      )
+            job.save()
+        except DataError:
+            return "invalid data"
+
         db.close()
         return "success"
 
