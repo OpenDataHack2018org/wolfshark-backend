@@ -90,4 +90,4 @@ def grib_to_png(filename, text, area=Areas.WORLD, width=4000, dark=True):
 
 
 if __name__ == "__main__":
-    grib_to_png(sys.argv[1], "test")
+    grib_to_png(sys.argv[1], "test", area=Areas.EUROPE)
