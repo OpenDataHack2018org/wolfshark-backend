@@ -9,7 +9,7 @@ from output import Output
 from cdsapi_wrapper import get_grib_files
 import datetime
 
-app = Flask(__name__, static_folder='static/static', template_folder='static')
+app = Flask(__name__, static_folder='dist/static', template_folder='dist')
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
