@@ -58,6 +58,7 @@ class Jobs(Resource):
 
     def get(self):
         a = []
+        db.connect()
         for job in Job.select():
             a.append({'job_id': job.job_id, 'user_name': job.user_name, 'title': job.title,
                       'start_date_time': str(job.start_date_time),
@@ -65,6 +66,7 @@ class Jobs(Resource):
                       'dataset': job.dataset, 'area': job.area, 'theme': job.theme,
                       'speed': job.speed, 'status': job.status, 'resolution': job.resolution,
                       'output': job.output, 'format': job.format})
+        db.close()
         return a
 
 
