@@ -31,7 +31,7 @@ parser.add_argument("output")
 parser.add_argument("format")
 
 
-class AddJob(Resource):
+class Jobs(Resource):
     def post(self):
         args = parser.parse_args()
         db.connect()
@@ -43,19 +43,32 @@ class AddJob(Resource):
                   start_date_time=args["start_date_time"],
                   end_date_time=args["end_date_time"],
                   interval=args["interval"],
+                  dataset=args["dataset"],
                   theme=Theme[args["theme"].upper()].value,
                   speed=args["speed"],
                   resolution=args["resolution"],
                   output=Output[args["output"].upper()].value,
                   format=args["format"],
-                  status=Status.QUEUED.value
+                  status=Status.QUEUED.value,
+                  video=""  # may cause problems not sure until we try
                   )
         job.save()
         db.close()
         return "success"
 
+    def get(self):
+        a = []
+        for job in Job.select():
+            a.append({'job_id': job.job_id, 'user_name': job.user_name, 'title': job.title,
+                      'start_date_time': str(job.start_date_time),
+                      'end_date_time': str(job.end_date_time), 'interval': job.interval,
+                      'dataset': job.dataset, 'area': job.area, 'theme': job.theme,
+                      'speed': job.speed, 'status': job.status, 'resolution': job.resolution,
+                      'output': job.output, 'format': job.format})
+        return a
 
-api.add_resource(AddJob, '/api/job')
+
+api.add_resource(Jobs, '/api/job')
 
 if __name__ == '__main__':
     p = os.environ.get('PORT')
