@@ -37,6 +37,7 @@ class Worker:
         vc = VideoConvert("downloads/%d" % self.job.job_id, self.job.speed)
         vc.run()
 
+        print("video transcoding done")
         # Clean up temporary files.
         cds.clean_up_temporary_files(self.job.job_id)
 
