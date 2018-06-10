@@ -53,8 +53,7 @@ class Jobs(Resource):
                       resolution=args["resolution"],
                       output=Output[args["output"].upper()].value,
                       format=args["format"],
-                      status=Status.QUEUED.value,
-                      video=""  # may cause problems not sure until we try
+                      status=Status.QUEUED.value
                       )
             job.save()
         except DataError:
