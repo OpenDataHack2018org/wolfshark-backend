@@ -15,16 +15,7 @@ class Worker:
 
     def run(self):
         # Get GRIB files from the server
-        get_grib_files(self.job.job_id,
-                       datetime.date(self.job.start_date_time.year,
-                                     self.job.start_date_time.month,
-                                     self.job.start_date_time.day),
-                       datetime.time(self.job.start_date_time.hour),
-                       datetime.date(self.job.end_date_time.year,
-                                     self.job.end_date_time.month,
-                                     self.job.end_date_time.day),
-                       datetime.time(self.job.end_date_time.hour),
-                       self.job.interval)
+        get_grib_files(self.job)
 
 
         # Convert GRIB files into PNG's
