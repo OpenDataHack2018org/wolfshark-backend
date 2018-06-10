@@ -15,6 +15,10 @@ db = PostgresqlDatabase('postgres',
                         password='pa55w0rd',
                         host='0.0.0.0')
 
+db.connect()
+db.create_tables([Job])
+db.close()
+
 parser = reqparse.RequestParser()
 parser.add_argument("user_name")
 parser.add_argument("user_key")
@@ -35,7 +39,6 @@ class Jobs(Resource):
     def post(self):
         args = parser.parse_args()
         db.connect()
-        db.create_tables([Job])
         try:
             job = Job(user_name=args["user_name"],
                       user_key=args["user_key"],
