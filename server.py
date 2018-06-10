@@ -81,9 +81,9 @@ api.add_resource(Jobs, '/api/job')
 
 if __name__ == '__main__':
     p = os.environ.get('PORT')
-
     # Launch worker to ansyncronously handle the video generation
-    worker = threading.Thread(target=workers.workerController, args=(2,))
+    print("starting the worker thread")
+    worker = threading.Thread(target=workers.workerController)
     worker.start()
+    app.run(debug=True, port=p, use_reloader=False)
 
-    app.run(debug=True, port=p)

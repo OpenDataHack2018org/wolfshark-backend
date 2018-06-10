@@ -7,9 +7,10 @@ from dataset import dataset as ds
 def get_grib_files(job):
     current_datetime = job.start_date_time
     interval_timedelta = datetime.timedelta(hours=job.interval)
+    number =  1
     while current_datetime <= job.end_date_time:
         print("Looking up " + str(current_datetime))
-        make_request(job.job_id,
+        make_request(number, job.job_id,
             str(current_datetime.year),
             str(current_datetime.month),
             str(current_datetime.day),
@@ -20,7 +21,7 @@ def get_grib_files(job):
 
 def make_request(number, job_id, year, month, day, time, dataset):
 
-    filename = str(number) + "%d09" % i
+    filename = str(job_id) +"/%09d" % number
     if not os.path.exists('downloads/%s' % job_id):
         os.makedirs('downloads/%s' % job_id)
 

@@ -15,7 +15,7 @@ class Job(Model):
     interval = IntegerField()
     dataset = CharField()
     area = CharField()                # TODO use blobs or JSON
-    theme = IntegerField()
+    theme = BooleanField()
     speed = IntegerField()
     status = IntegerField()
     resolution = IntegerField()
