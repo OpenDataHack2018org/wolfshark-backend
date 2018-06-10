@@ -63,4 +63,5 @@ def workerController(max_number_of_workers):
                 workers.append(w)
                 w.job.status = Status.PROCESSING.value
                 w.job.save()
-                w.start()
+                thread = threading.Thread(target=w.run, daemon=True)
+                thread.start()
