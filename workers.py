@@ -38,6 +38,8 @@ class Worker:
         # Clean up temporary files.
         clean_up_temporary_files(self.job.job_id)
 
+        self.job.status = Status.COMPLETED.value
+        self.job.save()
         self.complete = True
 
 
@@ -58,6 +60,10 @@ def workerController(max_number_of_workers):
             # We can schedule some new workers.
 
             # Check to see if there are any jobs that are in the queue
-            ##queued_jobs = Job.select().order_by(Job.id)
-            for j in Job.select().where(Job.status == Status.QUEUED.value).order_by(Job.job_id):
-                print(j.job_id)
+            queued_jobs = Job.select().where(Job.status == Status.QUEUED.value).order_by(Job.job_id)
+            if queued_jobs.count() > 0:
+                w = Worker(queued_jobs[0])
+                workers.append(w)
+                w.job.status = Status.PROCESSING.value
+                w.job.save()
+                w.start()
