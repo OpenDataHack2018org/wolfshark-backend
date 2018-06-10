@@ -52,7 +52,7 @@ class AddJob(Resource):
                   )
         job.save()
         db.close()
-        return {'hello': 'world'}
+        return "success"
 
 
 api.add_resource(AddJob, '/api/job')
