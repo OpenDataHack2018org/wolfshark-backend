@@ -9,7 +9,6 @@ db = PostgresqlDatabase('postgres',
 class Job(Model):
     job_id = AutoField()
     user_name = CharField()
-    user_key = CharField()
     title = CharField()
     start_date_time = DateTimeField()
     end_date_time = DateTimeField()
