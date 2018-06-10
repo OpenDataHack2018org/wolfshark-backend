@@ -1,8 +1,11 @@
+import os
 from flask import Flask
 from flask_restful import reqparse, Resource, Api
-import os
-from job import Job
 from peewee import *
+from job import Job
+from theme import Theme
+from status import Status
+from output import Output
 
 app = Flask(__name__)
 api = Api(app)
@@ -10,7 +13,7 @@ api = Api(app)
 db = PostgresqlDatabase('postgres',
                         user='postgres',
                         password='pa55w0rd',
-                        host='127.0.0.1')
+                        host='0.0.0.0')
 
 parser = reqparse.RequestParser()
 parser.add_argument("user_name")
@@ -40,11 +43,12 @@ class AddJob(Resource):
                   start_date_time=args["start_date_time"],
                   end_date_time=args["end_date_time"],
                   interval=args["interval"],
-                  theme=args["theme"],
+                  theme=Theme[args["theme"].upper()].value,
                   speed=args["speed"],
                   resolution=args["resolution"],
-                  output=args["output"],
-                  format=args["format"]
+                  output=Output[args["output"].upper()].value,
+                  format=args["format"],
+                  status=Status.QUEUED.value
                   )
         job.save()
         db.close()
