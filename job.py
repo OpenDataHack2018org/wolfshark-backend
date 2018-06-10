@@ -3,18 +3,18 @@ from peewee import *
 db = PostgresqlDatabase('postgres',
                         user='postgres',
                         password='pa55w0rd',
-                        host='127.0.0.1')
+                        host='0.0.0.0')
 
 
 class Job(Model):
     job_id = AutoField()
-    title = CharField()
     user_name = CharField()
     user_key = CharField()
+    title = CharField()
     start_date_time = DateTimeField()
     end_date_time = DateTimeField()
     interval = IntegerField()
-    no_of_frames = IntegerField()
+    dataset = CharField()
     area = CharField()                # TODO use blobs or JSON
     theme = IntegerField()
     speed = IntegerField()

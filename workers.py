@@ -46,6 +46,12 @@ class Worker:
 def workerController(max_number_of_workers):
     workers = []
 
+    db = PostgresqlDatabase('postgres',
+                            user='postgres',
+                            password='pa55w0rd',
+                            host='0.0.0.0')
+    db.connect()
+
     while True:
         # Loop through current workers and remove the ones that are finished.
         i = 0

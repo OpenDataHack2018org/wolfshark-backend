@@ -1,15 +1,25 @@
-import cdsapi_wrapper as cds
-import datetime
-from flask import Flask
-from flask_restful import reqparse, Resource, Api
 import os
-from job import Job
+from flask import Flask, send_from_directory
+from flask_restful import reqparse, Resource, Api
 from peewee import *
 import threading
 import workers
+from job import Job
+from theme import Theme
+from status import Status
+from output import Output
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='')
 api = Api(app)
+
+db = PostgresqlDatabase('postgres',
+                        user='postgres',
+                        password='pa55w0rd',
+                        host='0.0.0.0')
+
+db.connect()
+db.create_tables([Job])
+db.close()
 
 parser = reqparse.RequestParser()
 parser.add_argument("user_name")
@@ -27,29 +37,54 @@ parser.add_argument("output")
 parser.add_argument("format")
 
 
-class AddJob(Resource):
+class Jobs(Resource):
     def post(self):
         args = parser.parse_args()
-        print(args)
-        return {'hello': 'world'}
+        db.connect()
+        try:
+            job = Job(user_name=args["user_name"],
+                      user_key=args["user_key"],
+                      title=args["title"],
+                      area=args["area"],
+                      start_date_time=args["start_date_time"],
+                      end_date_time=args["end_date_time"],
+                      interval=args["interval"],
+                      dataset=args["dataset"],
+                      theme=Theme[args["theme"].upper()].value,
+                      speed=args["speed"],
+                      resolution=args["resolution"],
+                      output=Output[args["output"].upper()].value,
+                      format=args["format"],
+                      status=Status.QUEUED.value
+                      )
+            job.save()
+        except DataError:
+            return "invalid data"
+
+        db.close()
+        return "success"
+
+    def get(self):
+        a = []
+        db.connect()
+        for job in Job.select():
+            a.append({'job_id': job.job_id, 'user_name': job.user_name, 'title': job.title,
+                      'start_date_time': str(job.start_date_time),
+                      'end_date_time': str(job.end_date_time), 'interval': job.interval,
+                      'dataset': job.dataset, 'area': job.area, 'theme': job.theme,
+                      'speed': job.speed, 'status': job.status, 'resolution': job.resolution,
+                      'output': job.output, 'format': job.format})
+        db.close()
+        return a
 
 
-api.add_resource(AddJob, '/api/job')
+api.add_resource(Jobs, '/api/job')
 
 if __name__ == '__main__':
     p = os.environ.get('PORT')
 
-    db = PostgresqlDatabase('postgres',
-                        user='postgres',
-                        password='pa55w0rd',
-                        host='127.0.0.1')
-    db.connect()
-    db.create_tables([Job])
-
     # Launch worker to ansyncronously handle the video generation
     worker = threading.Thread(target=workers.workerController, args=(2,))
     worker.start()
-    
-    app.run(debug=True, port=p)
 
-# , "user_key", , , , ,, , , , ,
+    app.run(debug=True, port=p)
