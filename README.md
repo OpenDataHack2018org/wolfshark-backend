@@ -1,19 +1,24 @@
 # wolfshark-backend
 #OpenDataHack2017 @CopernicusECMPWF challenge #10 (backend)
 
-To install you will need to pip install the following:
-
-* peewee
-* psycopg2-binary
-* flask
-* flask-restful
-
-* a postgres instance either docker or local but the details have to be as following\
-
-run with docker command below and 0.0.0.0 as the host in job.py and server.py
+To install you will need to verify all dependencies are installed:
 
 ```
- docker run --name shark -e POSTGRES_PASSWORD=pa55w0rd -d -p 5432:5432 postgres
+pip3 install -r requirements.txt
 ```
 
-or a local instance with name postgres, user postgres and password pa55w0rd
+Additionally, you need a PostgreSQL instance either via docker or locally, but
+note that the configuration should be as following:
+
+```
+docker run --name shark -e POSTGRES_PASSWORD=pa55w0rd -d -p 5432:5432 postgres
+```
+
+For a local instance setup, name should be `postgres`, user `postgres` and
+password `pa55w0rd`.
+
+Finally, to run the server, start it with following command:
+
+```
+python3 server.py
+```

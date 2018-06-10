@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_restful import reqparse, Resource, Api
 from peewee import *
 from job import Job
@@ -9,13 +9,17 @@ from output import Output
 from cdsapi_wrapper import get_grib_files
 import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='')
 api = Api(app)
 
 db = PostgresqlDatabase('postgres',
                         user='postgres',
                         password='pa55w0rd',
                         host='0.0.0.0')
+
+db.connect()
+db.create_tables([Job])
+db.close()
 
 parser = reqparse.RequestParser()
 parser.add_argument("user_name")
@@ -37,7 +41,6 @@ class Jobs(Resource):
     def post(self):
         args = parser.parse_args()
         db.connect()
-        db.create_tables([Job])
         try:
             job = Job(user_name=args["user_name"],
                       user_key=args["user_key"],
@@ -52,8 +55,7 @@ class Jobs(Resource):
                       resolution=args["resolution"],
                       output=Output[args["output"].upper()].value,
                       format=args["format"],
-                      status=Status.QUEUED.value,
-                      video=""  # may cause problems not sure until we try
+                      status=Status.QUEUED.value
                       )
             job.save()
         except DataError:
@@ -68,6 +70,7 @@ class Jobs(Resource):
 
     def get(self):
         a = []
+        db.connect()
         for job in Job.select():
             a.append({'job_id': job.job_id, 'user_name': job.user_name, 'title': job.title,
                       'start_date_time': str(job.start_date_time),
@@ -75,6 +78,7 @@ class Jobs(Resource):
                       'dataset': job.dataset, 'area': job.area, 'theme': job.theme,
                       'speed': job.speed, 'status': job.status, 'resolution': job.resolution,
                       'output': job.output, 'format': job.format})
+        db.close()
         return a
 
 

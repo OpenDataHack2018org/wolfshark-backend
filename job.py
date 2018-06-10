@@ -22,7 +22,6 @@ class Job(Model):
     resolution = IntegerField()
     output = IntegerField()
     format = CharField()
-    video = CharField()
 
     class Meta:
         database = db
