@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_restful import reqparse, Resource, Api
 from peewee import *
 from job import Job
@@ -7,7 +7,7 @@ from theme import Theme
 from status import Status
 from output import Output
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='')
 api = Api(app)
 
 db = PostgresqlDatabase('postgres',
