@@ -70,7 +70,7 @@ class Jobs(Resource):
     def get(self):
         a = []
         db.connect()
-        for job in Job.select():
+        for job in Job.select().order_by(Job.job_id.desc()):
             a.append({'job_id': job.job_id, 'user_name': job.user_name, 'title': job.title,
                       'start_date_time': str(job.start_date_time),
                       'end_date_time': str(job.end_date_time), 'interval': job.interval,
