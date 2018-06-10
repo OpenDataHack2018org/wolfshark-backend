@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_restful import reqparse, Resource, Api
 from peewee import *
 from job import Job
@@ -7,7 +7,7 @@ from theme import Theme
 from status import Status
 from output import Output
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='')
 api = Api(app)
 
 db = PostgresqlDatabase('postgres',
@@ -65,6 +65,7 @@ class Jobs(Resource):
 
     def get(self):
         a = []
+        db.connect()
         for job in Job.select():
             a.append({'job_id': job.job_id, 'user_name': job.user_name, 'title': job.title,
                       'start_date_time': str(job.start_date_time),
@@ -72,6 +73,7 @@ class Jobs(Resource):
                       'dataset': job.dataset, 'area': job.area, 'theme': job.theme,
                       'speed': job.speed, 'status': job.status, 'resolution': job.resolution,
                       'output': job.output, 'format': job.format})
+        db.close()
         return a
 
 
