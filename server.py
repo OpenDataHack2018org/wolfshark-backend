@@ -1,5 +1,5 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template
 from flask_restful import reqparse, Resource, Api
 from peewee import *
 from job import Job
@@ -9,7 +9,13 @@ from output import Output
 from cdsapi_wrapper import get_grib_files
 import datetime
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+app = Flask(__name__, static_folder='static/static', template_folder='static')
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return render_template('index.html')
+
 api = Api(app)
 
 db = PostgresqlDatabase('postgres',
