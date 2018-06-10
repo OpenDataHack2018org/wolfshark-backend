@@ -4,13 +4,12 @@ import datetime
 from shutil import rmtree
 from dataset import dataset as ds
 
-def get_grib_files(job_id, start_date, start_time, end_date, end_time, interval, dataset):
-    current_datetime = datetime.datetime(start_date.year, start_date.month, start_date.day, hour=start_time.hour)
-    end_datetime = datetime.datetime(end_date.year, end_date.month, end_date.day, hour=end_time.hour)
-    interval_timedelta = datetime.timedelta(hours=interval)
-    while current_datetime <= end_datetime:
+def get_grib_files(job):
+    current_datetime = job.start_date_time
+    interval_timedelta = datetime.timedelta(hours=job.interval)
+    while current_datetime <= job.end_date_time:
         print("Looking up " + str(current_datetime))
-        make_request(job_id, str(current_datetime.year), str(current_datetime.month), str(current_datetime.day), str(current_datetime.hour) + ":00", dataset)
+        make_request(job.job_id, str(current_datetime.year), str(current_datetime.month), str(current_datetime.day), str(current_datetime.hour) + ":00", job.dataset)
         current_datetime += interval_timedelta
 
 def make_request(job_id, year, month, day, time, dataset):

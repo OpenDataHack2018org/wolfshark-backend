@@ -61,17 +61,7 @@ class Jobs(Resource):
 
         job = Job.select().where(Job.job_id == job.job_id).get()
 
-        get_grib_files(job.job_id,
-                       datetime.date(job.start_date_time.year,
-                                     job.start_date_time.month,
-                                     job.start_date_time.day),
-                       datetime.time(job.start_date_time.hour),
-                       datetime.date(job.end_date_time.year,
-                                     job.end_date_time.month,
-                                     job.end_date_time.day),
-                       datetime.time(job.end_date_time.hour),
-                       job.interval,
-                       job.dataset)
+        get_grib_files(job)
 
         db.close()
         return "success"
