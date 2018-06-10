@@ -1,5 +1,5 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template
 from flask_restful import reqparse, Resource, Api
 from peewee import *
 import threading
@@ -9,7 +9,15 @@ from theme import Theme
 from status import Status
 from output import Output
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+app = Flask(__name__, static_folder='dist/static', template_folder='dist')
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return render_template('index.html')
+
+
 api = Api(app)
 
 db = PostgresqlDatabase('postgres',
@@ -20,6 +28,9 @@ db = PostgresqlDatabase('postgres',
 db.connect()
 db.create_tables([Job])
 db.close()
+
+if not os.path.exists('./dist/static/videos'):
+    os.makedirs('./dist/static/videos')
 
 parser = reqparse.RequestParser()
 parser.add_argument("user_name")
@@ -66,7 +77,7 @@ class Jobs(Resource):
     def get(self):
         a = []
         db.connect()
-        for job in Job.select():
+        for job in Job.select().order_by(Job.job_id.desc()):
             a.append({'job_id': job.job_id, 'user_name': job.user_name, 'title': job.title,
                       'start_date_time': str(job.start_date_time),
                       'end_date_time': str(job.end_date_time), 'interval': job.interval,
