@@ -16,6 +16,7 @@ app = Flask(__name__, static_folder='dist/static', template_folder='dist')
 def catch_all(path):
     return render_template('index.html')
 
+
 api = Api(app)
 
 db = PostgresqlDatabase('postgres',
@@ -26,6 +27,9 @@ db = PostgresqlDatabase('postgres',
 db.connect()
 db.create_tables([Job])
 db.close()
+
+if not os.path.exists('./dist/static/videos'):
+    os.makedirs('./dist/static/videos')
 
 parser = reqparse.RequestParser()
 parser.add_argument("user_name")
