@@ -6,6 +6,8 @@ from job import Job
 from theme import Theme
 from status import Status
 from output import Output
+from cdsapi_wrapper import get_grib_files
+import datetime
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 api = Api(app)
@@ -58,6 +60,10 @@ class Jobs(Resource):
             job.save()
         except DataError:
             return "invalid data"
+
+        job = Job.select().where(Job.job_id == job.job_id).get()
+
+        get_grib_files(job)
 
         db.close()
         return "success"
