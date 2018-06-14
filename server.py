@@ -29,8 +29,8 @@ db.connect()
 db.create_tables([Job])
 db.close()
 
-if not os.path.exists('./dist/static/videos'):
-    os.makedirs('./dist/static/videos')
+if not os.path.exists('./dist/videos'):
+    os.makedirs('./dist/videos')
 
 parser = reqparse.RequestParser()
 parser.add_argument("user_name")
@@ -97,4 +97,3 @@ if __name__ == '__main__':
     worker = threading.Thread(target=workers.workerController)
     worker.start()
     app.run(debug=True, port=p, use_reloader=False)
-
