@@ -77,7 +77,7 @@ def grib_to_png(filename, text, area=Areas.WORLD, width=4000, dark=True):
         text_box_y_position=28.5,
         text_box_x_position=28,
         text_mode="positional",
-        text_line_1="Sea ice ERA 5 reanalysis",
+        text_line_1="ERA 5 reanalysis",
         text_line_2=text,
         text_line_3="<grib_info key='valid-date' format='%d %B %Y' />",
         text_line_count=3,
