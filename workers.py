@@ -30,11 +30,11 @@ class Worker:
             f = ("downloads/%d/" % self.job.job_id) + f
             print("Converting to PNG file" + str(self.job.job_id))
             print(self.job)
-            grib_to_png(f, "test", area=Areas[self.job.area.upper()], width=self.job.resolution, dark=self.job.theme)
+            grib_to_png(f, self.job.dataset, area=Areas[self.job.area.upper()], width=self.job.resolution, dark=self.job.theme)
 
             print("finished converting PNG file")
         # Compile PNG's into MP4
-        vc = VideoConvert("downloads/%d" % self.job.job_id, self.job.speed)
+        vc = VideoConvert(self.job.job_id, self.job.speed)
         vc.run()
 
         print("video transcoding done")

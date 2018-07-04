@@ -90,6 +90,5 @@ def grib_to_png(filename, text, area=Areas.WORLD, width=4000, dark=True):
 
     plot(out, area.value, background, data, my_cont, www_foreground, my_title)
 
-
 if __name__ == "__main__":
     grib_to_png(sys.argv[1], "test", area=Areas.EUROPE)
