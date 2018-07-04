@@ -29,8 +29,8 @@ db.connect()
 db.create_tables([Job])
 db.close()
 
-if not os.path.exists('./dist/videos'):
-    os.makedirs('./dist/videos')
+if not os.path.exists('./dist/static/videos'):
+    os.makedirs('./dist/static/videos')
 
 parser = reqparse.RequestParser()
 parser.add_argument("user_name")

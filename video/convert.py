@@ -16,7 +16,7 @@ class VideoConvert(object):
             "-crf", "25",
             "-pix_fmt", "yuv420p",
             "-y", # overwrite existing file
-            "dist/videos/%d.mp4" % self.thing_id
+            "dist/static/videos/%d.mp4" % self.thing_id
         ])
 
 if __name__ == "__main__":
