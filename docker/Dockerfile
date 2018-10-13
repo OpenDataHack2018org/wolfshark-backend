@@ -345,7 +345,8 @@ VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 
 USER root
 
-WORKDIR /code/wolfshark
+# XXX: Important, make sure to leave it to the backend folder, since our server code expects this path.
+WORKDIR /code/wolfshark/backend
 
 # Install NPM dependencies and build the production frontend app.
 RUN npm install --no-save
@@ -359,4 +360,4 @@ RUN chmod +x /root/setup_api_key.sh
 EXPOSE 5000
 
 # Setup the API key, and if successful, run PostgreSQL server and Flask application when the container launches.
-CMD /root/setup_api_key.sh && /etc/init.d/postgresql start && python /code/wolfshark/backend/server.py
+CMD /root/setup_api_key.sh && /etc/init.d/postgresql start && python server.py
