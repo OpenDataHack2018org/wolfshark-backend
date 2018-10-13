@@ -4,7 +4,7 @@
 First, you will need to verify all Python 3 dependencies are installed:
 
 ```
-pip3 install -r requirements.txt
+pip3 install -r docker/requirements.txt
 ```
 
 Secondly, make sure you have relatively recent FFMPEG package installed in your
