@@ -351,11 +351,12 @@ WORKDIR /code/wolfshark
 RUN npm install --no-save
 RUN npm run build
 
-# Make sure Flask application uses port 5000.
-ENV PORT 5000
+# Copy API setup script and make it executable.
+COPY setup_api_key.sh /root/
+RUN chmod +x /root/setup_api_key.sh
 
 # Expose the Flask application port.
 EXPOSE 5000
 
-# Run PostgreSQL server and Flask application when the container launches.
-CMD /etc/init.d/postgresql start && python backend/server.py
+# Setup the API key, and if successful, run PostgreSQL server and Flask application when the container launches.
+CMD /root/setup_api_key.sh && /etc/init.d/postgresql start && python /code/wolfshark/backend/server.py
