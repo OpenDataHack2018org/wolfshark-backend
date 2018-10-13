@@ -13,14 +13,9 @@ system available via global path.
 Finally, you need a PostgreSQL instance either via docker or locally, but
 note that the configuration should be as following:
 
-For a postgres instance in a docker container:
-
-```
-docker run --name shark -e POSTGRES_PASSWORD=pa55w0rd -d -p 5432:5432 postgres
-```
-
-For a local instance setup, name should be `postgres`, user `postgres` and
-password `pa55w0rd`.
+* database name: `docker`
+* user name: `docker`
+* password: `pa55w0rd`
 
 You will also need to create a file in your root directory (~) called .cdsapirc
 containing:

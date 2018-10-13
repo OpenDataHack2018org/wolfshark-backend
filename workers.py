@@ -48,8 +48,8 @@ class Worker:
 
 def workerController():
     print("worker connecting to DB")
-    db = PostgresqlDatabase('postgres',
-                            user='postgres',
+    db = PostgresqlDatabase('docker',
+                            user='docker',
                             password='pa55w0rd',
                             host='0.0.0.0')
     db.connect()

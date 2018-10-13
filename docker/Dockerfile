@@ -121,10 +121,6 @@ RUN set -ex \
 # RUN set -ex \
 #     && pip install -r /root/requirements-testing.txt
 
-# Copy Git credentials.
-COPY .ssh/id_rsa.pub /root/.ssh/id_rsa.pub
-
-
 # Install application source code.
 RUN set -eux \
     && mkdir /code \
@@ -280,13 +276,16 @@ RUN apt-get update \
     && apt-get install -y curl \
     && apt-get -y autoclean
 
+# nvm location
+RUN mkdir -p /usr/local/nvm
+
 # nvm environment variables
 ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 6.2.0
+ENV NODE_VERSION 8.12.0
 
 # install nvm
 # https://github.com/creationix/nvm#install-script
-RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | bash
+RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 
 # install node and npm
 RUN source $NVM_DIR/nvm.sh \
@@ -347,3 +346,16 @@ VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 USER root
 
 WORKDIR /code/wolfshark
+
+# Install NPM dependencies and build the production frontend app.
+RUN npm install --no-save
+RUN npm run build
+
+# Make sure Flask application uses port 5000.
+ENV PORT 5000
+
+# Expose the Flask application port.
+EXPOSE 5000
+
+# Run PostgreSQL server and Flask application when the container launches.
+CMD /etc/init.d/postgresql start && python backend/server.py

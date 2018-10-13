@@ -1,7 +1,7 @@
 from peewee import *
 
-db = PostgresqlDatabase('postgres',
-                        user='postgres',
+db = PostgresqlDatabase('docker',
+                        user='docker',
                         password='pa55w0rd',
                         host='0.0.0.0')
 
