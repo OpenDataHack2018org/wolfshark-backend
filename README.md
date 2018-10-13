@@ -1,4 +1,4 @@
-# WolfShark (frontend)
+# WolfShark (backend)
 
 > #OpenDataHack2017 @CopernicusECMPWF challenge #10
 > Automated visualization and animation generator based on climate data.
