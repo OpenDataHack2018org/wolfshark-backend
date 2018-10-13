@@ -96,4 +96,4 @@ if __name__ == '__main__':
     print("starting the worker thread")
     worker = threading.Thread(target=workers.workerController)
     worker.start()
-    app.run(debug=True, port=p, use_reloader=False)
+    app.run(debug=True, host='0.0.0.0', port=p, use_reloader=False)
