@@ -274,6 +274,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 # and install dependencies
 RUN apt-get update \
     && apt-get install -y curl \
+    && apt-get install -y git \
     && apt-get -y autoclean
 
 # nvm location

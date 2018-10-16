@@ -12,7 +12,7 @@ def get_grib_files(job, threads):
     n = (job.end_date_time - job.start_date_time) / interval_timedelta
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-        for i in range(n):
+        for i in range(int(n)):
             current_datetime = job.start_date_time + (i * interval_timedelta)
             executor.submit(make_request,
                             i,
