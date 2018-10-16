@@ -37,6 +37,7 @@ def get_grib_files(job, threads):
 
 def make_request(number, job_id, year, month, day, time, dataset):
 
+    print(number)
     filename = str(job_id) + "/%09d" % number
     if not os.path.exists('downloads/%s' % job_id):
         os.makedirs('downloads/%s' % job_id)

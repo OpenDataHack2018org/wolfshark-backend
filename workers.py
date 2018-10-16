@@ -22,7 +22,7 @@ class Worker:
         print(self.job)
         print("Getting GRIB from CDS")
         time.sleep(2)
-        cds.get_grib_files(self.job, 1)
+        cds.get_grib_files(self.job, 4)
 
 
         # Convert GRIB files into PNG's

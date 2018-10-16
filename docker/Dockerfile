@@ -348,6 +348,8 @@ USER root
 # XXX: Important, make sure to leave it to the backend folder, since our server code expects this path.
 WORKDIR /code/wolfshark/backend
 
+RUN git checkout multithreading
+
 # Install NPM dependencies and build the production frontend app.
 RUN npm install --no-save
 RUN npm run build
