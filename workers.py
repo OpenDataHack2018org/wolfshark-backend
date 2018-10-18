@@ -9,11 +9,13 @@ from magics.grib import grib_to_png
 from magics.areas import Areas
 from video.convert import VideoConvert
 import time
+import concurrent.futures
 
 class Worker:
-    def __init__(self, job):
+    def __init__(self, job, threads):
         self.job = job
         self.complete = False
+        self.threads = threads
 
     def do_the_work(self):
         # Get GRIB files from the server
@@ -22,17 +24,22 @@ class Worker:
         print(self.job)
         print("Getting GRIB from CDS")
         time.sleep(2)
-        cds.get_grib_files(self.job, 4)
+        cds.get_grib_files(self.job, self.threads)
 
 
         # Convert GRIB files into PNG's
-        for f in os.listdir("downloads/%d" % self.job.job_id):
-            f = ("downloads/%d/" % self.job.job_id) + f
-            print("Converting to PNG file" + str(self.job.job_id))
-            print(self.job)
-            grib_to_png(f, self.job.dataset, area=Areas[self.job.area.upper()], width=self.job.resolution, dark=self.job.theme)
-
-            print("finished converting PNG file")
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.threads) as executor:
+            for f in os.listdir("downloads/%d" % self.job.job_id):
+                f = ("downloads/%d/" % self.job.job_id) + f
+                print("Converting to PNG file" + str(self.job.job_id))
+                print(self.job)
+                executor.submit(grib_to_png,
+                                f,
+                                self.job.dataset,
+                                area=Areas[self.job.area.upper()],
+                                width=self.job.resolution,
+                                dark=self.job.theme)
+                print("finished converting PNG file")
         # Compile PNG's into MP4
         vc = VideoConvert(self.job.job_id, self.job.speed)
         vc.run()
