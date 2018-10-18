@@ -66,7 +66,7 @@ def workerController():
         queued_jobs = Job.select().where(Job.status == Status.QUEUED.value)
         if queued_jobs.count() > 0:
             job = queued_jobs[0]
-            w = Worker(job)
+            w = Worker(job, 4)
             print(threading.current_thread())
             print(threading.active_count())
             w.do_the_work()
