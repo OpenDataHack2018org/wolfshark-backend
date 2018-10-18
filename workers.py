@@ -28,6 +28,21 @@ class Worker:
 
 
         # Convert GRIB files into PNG's
+        self.make_images()
+
+        # Compile PNG's into MP4
+        vc = VideoConvert(self.job.job_id, self.job.speed)
+        vc.run()
+
+        print("video transcoding done")
+        # Clean up temporary files.
+        cds.clean_up_temporary_files(self.job.job_id)
+
+        self.job.status = Status.COMPLETED.value
+        self.job.save()
+        self.complete = True
+
+    def make_images(self):
         with concurrent.futures.ThreadPoolExecutor(max_workers=self.threads) as executor:
             for f in os.listdir("downloads/%d" % self.job.job_id):
                 f = ("downloads/%d/" % self.job.job_id) + f
@@ -40,17 +55,8 @@ class Worker:
                                 width=self.job.resolution,
                                 dark=self.job.theme)
                 print("finished converting PNG file")
-        # Compile PNG's into MP4
-        vc = VideoConvert(self.job.job_id, self.job.speed)
-        vc.run()
 
-        print("video transcoding done")
-        # Clean up temporary files.
-        cds.clean_up_temporary_files(self.job.job_id)
 
-        self.job.status = Status.COMPLETED.value
-        self.job.save()
-        self.complete = True
 
 
 def workerController():
