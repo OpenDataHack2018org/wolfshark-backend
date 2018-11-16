@@ -17,6 +17,20 @@ class Worker:
         self.complete = False
         self.threads = threads
 
+    def make_images(self):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.threads) as ex:
+            for f in os.listdir("downloads/%d" % self.job.job_id):
+                f = ("downloads/%d/" % self.job.job_id) + f
+                print("Converting to PNG file" + str(self.job.job_id))
+                print(self.job)
+                ex.submit(grib_to_png,
+                                f,
+                                self.job.dataset,
+                                area=Areas[self.job.area.upper()],
+                                width=self.job.resolution,
+                                dark=self.job.theme)
+                print("finished converting PNG file")
+
     def do_the_work(self):
         # Get GRIB files from the server
         self.job.status = Status.PROCESSING.value
@@ -41,22 +55,6 @@ class Worker:
         self.job.status = Status.COMPLETED.value
         self.job.save()
         self.complete = True
-
-    def make_images(self):
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self.threads) as executor:
-            for f in os.listdir("downloads/%d" % self.job.job_id):
-                f = ("downloads/%d/" % self.job.job_id) + f
-                print("Converting to PNG file" + str(self.job.job_id))
-                print(self.job)
-                executor.submit(grib_to_png,
-                                f,
-                                self.job.dataset,
-                                area=Areas[self.job.area.upper()],
-                                width=self.job.resolution,
-                                dark=self.job.theme)
-                print("finished converting PNG file")
-
-
 
 
 def workerController():
